@@ -71,6 +71,19 @@ charCount('a', 'edabit');
 charCount('c', 'Chamber of secrets');
 charCount('b', 'big fat bubble');
 
+// const charCount = (letter, str) => {
+//   const splitArr = str.split('');
+//   var count = 0;
+//   const total = el => {
+//     el === letter ? count++ : (count = count + 0);
+//   };
+//   splitArr.forEach(total);
+//   return count;
+// };
+// console.log(charCount('a', 'edabit'));
+// console.log(charCount('c', 'Chamber of secrets'));
+// console.log(charCount('b', 'big fat bubble'));
+
 /* Question 6: Create a function to return the amount of potatoes there are in a string.
 potatoes("potato") ➞ 1
 potatoes("potatopotato") ➞ 2
