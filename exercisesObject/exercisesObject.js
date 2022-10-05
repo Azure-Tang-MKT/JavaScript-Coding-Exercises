@@ -1,17 +1,32 @@
 "use strict";
+
 // Q1: Given three arguments ⁠— an object obj of the stolen items, the pets name and a value ⁠— return an object with that name and value in it (as key-value pairs).
-let objectResult;
-const addName = function (a, b, c) {
-  objectResult = a;
-  objectResult[b] = c;
-  return objectResult;
+//method 1:
+const addName = function (object, givenName, value) {
+  return { ...object, [givenName]: value };
 };
+
+// method 2
+const addName2 = (obj, key, value) => {
+  obj[key] = value;
+  return obj;
+};
+
 console.log(addName({}, "Brutus", 300));
 console.log(addName({ piano: 500 }, "Brutus", 400));
 console.log(addName({ piano: 500, stereo: 300 }, "Caligula", 440));
 
 //Q2: Create a function that takes an object and returns the keys and values as separate arrays. Return the keys sorted alphabetically, and their corresponding values in the same order.
+// keysAndValues({ a: 1, b: 2, c: 3 })
+// ➞ [["a", "b", "c"], [1, 2, 3]]
 
+// keysAndValues({ a: "Apple", b: "Microsoft", c: "Google" })
+// ➞ [["a", "b", "c"], ["Apple", "Microsoft", "Google"]]
+
+// keysAndValues({ key1: true, key2: false, key3: undefined })
+// ➞ [["key1", "key2", "key3"], [true, false, undefined]]
+
+// method 1:
 let indexObject;
 let valueOvject;
 const KeyAndValues = function (inputObject) {
@@ -23,11 +38,51 @@ const KeyAndValues = function (inputObject) {
     .map((x) => (x = x[1]));
   return [indexObject, valueOvject];
 };
-
 console.log(KeyAndValues({ a: 1, b: 2, c: 3 }));
 console.log(KeyAndValues({ a: "Apple", b: "Microsoft", c: "Google" }));
 
+//method 2:
+const separateArrays = function (givenObjects) {
+  const indexArray = Object.keys(givenObjects).sort();
+  const objectArray = indexArray.map((el) => givenObjects[el]);
+  return [indexArray, objectArray];
+};
+console.log(separateArrays({ a: 1, b: 2, c: 3 }));
+
+//method 3
+const KeyandValues3 = function (givenObject) {
+  const sortKey = Object.keys(givenObject).sort();
+  return [
+    sortKey,
+    sortKey.reduce((newArray, key) => {
+      newArray.push(givenObject[key]);
+      return newArray;
+    }, []),
+  ];
+};
+
+console.log(KeyandValues3({ a: "Apple", b: "Microsoft", c: "Google" }));
+
+// method 4:
+const keysAndValues4 = (oldObj) => {
+  const newObj = Object.keys(oldObj)
+    .sort()
+    .reduce((newObj, key) => {
+      newObj[key] = oldObj[key];
+      return newObj;
+    }, {});
+  console.log(newObj);
+  return [Object.keys(newObj), Object.values(newObj)];
+};
+
+console.log(keysAndValues4({ a: 1, b: 2, c: 3 }));
+console.log(keysAndValues4({ a: "Apple", b: "Microsoft", c: "Google" }));
+console.log(keysAndValues4({ key1: true, key2: false, key3: undefined }));
+
 //Q3: Create a function that determines whether a shopping order is eligible for free shipping. An order is eligible for free shipping if the total cost of items purchased exceeds $50.00.
+// freeShipping({ "Shampoo": 5.99, "Rubber Ducks": 15.99 }) ➞ false
+// freeShipping({ "Flatscreen TV": 399.99 }) ➞ true
+// freeShipping({ "Monopoly": 11.99, "Secret Hitler": 35.99, "Bananagrams": 13.99 }) ➞ true
 let sum;
 const freeShipping = function (givenObject) {
   sum = Object.values(givenObject).reduce((acc, cur) => acc + cur);
@@ -40,28 +95,74 @@ console.log(
 );
 
 //Q4. Write a function that creates an object with each (key, value) pair being the (lower case, upper case) versions of a letter, respectively .
+// mapping(["p", "s"]) ➞ { "p": "P", "s": "S" }
+// mapping(["a", "b", "c"]) ➞ { "a": "A", "b": "B", "c": "C" }
+// mapping(["a", "v", "y", "z"]) ➞ { "a": "A", "v": "V", "y": "Y", "z": "Z" }
 
-const mapping = (arr) => {
-  return arr.reduce((acc, item) => ((acc[item] = item.toUpperCase()), acc), {});
+//method 1:
+const mapping = function (givenArray) {
+  return givenArray.reduce((newObj, letter) => {
+    newObj[letter] = letter.toUpperCase();
+    return newObj;
+  }, {});
 };
-console.log(mapping(["a", "b", "c", "c"]));
+
 console.log(mapping(["a", "v", "y", "z"]));
 
-//Q5. Given an object of people and their ages, return how old the people would be after n years have passed. Use the absolute value of n.
-const afterNYears = function (givenObjects, N) {
-  return Object.values(givenObjects).map((el) => el + N);
+//method 2:
+const mapping2 = (givenArray) => {
+  return arr.reduce(
+    (givenArray, letter) => (
+      (givenArray[letter] = letter.toUpperCase()), givenArray
+    ),
+    {}
+  ); //a special writing
+};
+console.log(mapping2(["a", "b", "c", "c"]));
+console.log(mapping2(["a", "v", "y", "z"]));
+
+// method 3
+const mapping3 = (arr) => {
+  return Object.fromEntries(
+    arr.map((el) => [el.toLowerCase(), el.toUpperCase()])
+  );
+};
+
+// //Q5. Given an object of people and their ages, return how old the people would be after n years have passed. Use the absolute value of n. //$$$不要有多余的console.log
+// /* const afterNYears = function (givenObjects, N) {
+//   return Object.values(givenObjects).map((el) => el + N);
+// };
+// console.log(
+//   afterNYears({ Joel: 32, Fred: 44, Reginald: 65, Susan: 33, Julian: 13 }, 1)
+// ); */
+
+// /* const test = { Joel: 32, Fred: 44, Reginald: 65, Susan: 33, Julian: 13 };
+
+// // console.log(Object.entries(test).forEach(value, index)=>{});
+// const arrName = Object.keys(test);
+// console.log(arrName);
+// arrName.forEach((el) => (test[el] = test[el] + 1));
+// console.log(test); */
+
+const afterNYears = function (givenObj, Nyear) {
+  //const afterNYears = givenObj, Nyear) =>
+  return Object.keys(givenObj).reduce((newObj, key) => {
+    newObj[key] = givenObj[key] + Nyear;
+    return newObj;
+  }, {});
 };
 console.log(
-  afterNYears({ Joel: 32, Fred: 44, Reginald: 65, Susan: 33, Julian: 13 }, 1)
+  afterNYears(
+    {
+      Baby: 2,
+      Child: 8,
+      Teenager: 15,
+      Adult: 25,
+      Elderly: 71,
+    },
+    19
+  )
 );
-
-const test = { Joel: 32, Fred: 44, Reginald: 65, Susan: 33, Julian: 13 };
-console.log(Object.entries(test));
-// console.log(Object.entries(test).forEach(value, index)=>{});
-const arrName = Object.keys(test);
-console.log(arrName);
-arrName.forEach((el) => (test[el] = test[el] + 1));
-console.log(test);
 
 //Q6. Given an Object contains all soccer players name and the time they played. Write two functions to implement the below questions: Question1: To calculate the average played time of all players. Question2: To find out the players who’s time is over the average time and returns an object with the same format as the players object
 const players = {
@@ -75,12 +176,10 @@ const players = {
 //get average
 const playersAvg = function (players) {
   return Object.values(players).reduce(
-    (acc, cur) =>
-      acc + Number(Object.values(cur)) / Object.values(players).length,
+    (acc, cur) => acc + cur.time / Object.keys(players).length,
     0
   );
 };
-playersAvg(players);
 const avgNumber = playersAvg(players);
 console.log(avgNumber);
 
@@ -145,15 +244,26 @@ const nameScore = function (givenName) {
   scoreSum = givenName.split("").reduce((acc, cur) => acc + scores[cur], 0);
   console.log(scoreSum);
   if (scoreSum < 60) {
-    return console.log("NOT TOO GOOD");
+    return "NOT TOO GOOD";
   } else if (61 <= scoreSum && scoreSum <= 300) {
-    return console.log("PRETTY GOOD");
+    //$$$sxoreSum<=61
+    return "PRETTY GOOD";
   } else if (301 <= scoreSum && scoreSum <= 599) {
-    return console.log("VERY GOOD");
+    //$$$scoreSum<=301
+    return console.log("VERY GOOD"); //不需要console.log
   } else {
     return console.log("THE BEST");
   }
 };
+// alternative coding for if...else if...
+// return score <= 60
+// ? "NOT TOO GOOD"
+// : score >= 61 && score <= 300
+// ? "PRETTY GOOD"
+// : score <= 301 && score <= 599
+// ? "VERY GOOD"
+// : "THE BEST";
+
 nameScore("MUBASHIR");
 nameScore("YOU");
 nameScore("MATT");
@@ -169,15 +279,28 @@ const inputItmes = [
 transFormObj(inputItmes); 
 // { cat: ["Jack", "Jill", "Sally"], dog: ["Jill"], fish: ["Sally"] } */
 
+//method 1
 const endObjects = { cat: [], dog: [], fish: [] };
-
 const transFormObj = function (givenItemsArray) {
   givenItemsArray.forEach((i) =>
     i.pets.forEach((el) => {
-      endObjects[el] = [...endObjects[el], i.name];
+      endObjects[el] = [...endObjects[el], i.name]; //给object-value赋值方法
     })
   );
   return endObjects;
 };
 
 console.log(transFormObj(inputItmes));
+
+//method 2
+const solution2 = (inputItmes) => {
+  return inputItmes.reduce(
+    (acc, item) => {
+      item.pets.forEach((el) => (acc[el] = [...acc[el], item.name]));
+      return acc;
+    },
+    { cat: [], dog: [], fish: [] }
+  );
+};
+
+console.log(solution2(inputItmes));
