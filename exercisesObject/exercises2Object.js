@@ -29,6 +29,7 @@ console.log(
 );
 
 // 2. Given a list of shoes and write a function receives the shoeList as an argument and returns a new list which ordered as color(alphabetically). If two shoes has the same color and then order as the size.
+
 const shoeList = [
   { color: "white", size: 9 },
   { color: "red", size: 8.5 },
@@ -36,6 +37,21 @@ const shoeList = [
   { color: "blue", size: 11 },
   { color: "white", size: 9.5 },
 ];
+
+//method1:
+const orderedList = shoeList.sort((a, b) =>
+  a.color > b.color
+    ? 1
+    : a.color === b.color
+    ? a.size === b.size
+      ? 1
+      : -1
+    : -1
+);
+
+console.log(orderedList);
+
+//method2:
 const getNewObj = function (givenArray) {
   return givenArray.reduce((newList, el) => {
     newList[`${el.color}${el.size}`] = el;
